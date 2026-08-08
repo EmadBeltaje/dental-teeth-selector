@@ -1,0 +1,36 @@
+name: dental_teeth_selector
+description: Interactive Universal Numbering System dental chart for selecting teeth in Flutter.
+version: 0.0.1
+homepage: https://github.com/EmadBeltaje/dental-teeth-selector
+repository: https://github.com/EmadBeltaje/dental-teeth-selector
+issue_tracker: https://github.com/EmadBeltaje/dental-teeth-selector/issues
+
+environment:
+  sdk: ^3.11.5
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  path_drawing: ^1.0.1
+  xml: ^7.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+topics:
+  - dental
+  - teeth
+  - flutter-widget
+  - healthcare
+  - ui
+
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
