@@ -1,6 +1,6 @@
-# dental_teeth_selector 🦷
+# Dental Teeth Selector 🦷
 
-Interactive Universal Numbering System dental chart for Flutter.
+Flutter widget to select teeth for dental and medical use.
 
 ## Preview 📸
 
