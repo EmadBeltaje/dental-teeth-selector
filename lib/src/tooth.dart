@@ -16,7 +16,10 @@ class Tooth {
     path = combined.shift(-rect.topLeft);
   }
 
-  /// Universal Numbering System id (`"1"` … `"32"`).
+  /// Internal tooth id in Universal Numbering System (`"1"` … `"32"`).
+  ///
+  /// Public selection ids may be remapped to European (FDI) by
+  /// [DentalTeethSelector.numberingSystem].
   final String id;
 
   /// Tooth outline in local coordinates (origin at [rect.topLeft]).

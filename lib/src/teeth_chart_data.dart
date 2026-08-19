@@ -16,6 +16,8 @@ class TeethChartData {
     required this.teeth,
     required this.strokePaths,
     required this.numberPaths,
+    required this.numberCenters,
+    required this.numberFontSize,
     required this.rightLabelAnchor,
     required this.leftLabelAnchor,
   });
@@ -29,8 +31,16 @@ class TeethChartData {
   /// Non-selectable outline / anatomy strokes (SVG space).
   final List<Path> strokePaths;
 
-  /// Number glyph paths (SVG space).
+  /// Universal number glyph paths (SVG space).
   final List<Path> numberPaths;
+
+  /// Centers of Universal number labels, keyed by Universal id (`"1"`…`"32"`).
+  ///
+  /// Used to draw alternate numbering (e.g. FDI/European) as text.
+  final Map<String, Offset> numberCenters;
+
+  /// Suggested font size for drawn number labels (SVG space).
+  final double numberFontSize;
 
   /// Center of the "Right" label (between teeth 1 and 32).
   final Offset rightLabelAnchor;
@@ -75,8 +85,10 @@ TeethChartData parseTeethChartData(String svg) {
     }
   }
 
-  final numberCenters = <_NumberLabel>[];
+  final numberLabels = <_NumberLabel>[];
   final rawNumberPaths = <Path>[];
+  var numberHeightSum = 0.0;
+  var numberHeightCount = 0;
 
   for (final element in root.childElements) {
     if (element.name.local != 'g') {
@@ -91,6 +103,8 @@ TeethChartData parseTeethChartData(String svg) {
     var cx = 0.0;
     var cy = 0.0;
     var count = 0;
+    var minTop = double.infinity;
+    var maxBottom = double.negativeInfinity;
 
     for (final child in element.childElements) {
       if (child.name.local != 'path') {
@@ -106,15 +120,21 @@ TeethChartData parseTeethChartData(String svg) {
       final bounds = shifted.getBounds();
       cx += bounds.center.dx;
       cy += bounds.center.dy;
+      minTop = minTop < bounds.top ? minTop : bounds.top;
+      maxBottom = maxBottom > bounds.bottom ? maxBottom : bounds.bottom;
       count++;
     }
 
     if (count == 0) {
       continue;
     }
-    numberCenters.add(
+    if (maxBottom > minTop) {
+      numberHeightSum += maxBottom - minTop;
+      numberHeightCount++;
+    }
+    numberLabels.add(
       _NumberLabel(
-        id: '${numberCenters.length + 1}',
+        id: '${numberLabels.length + 1}',
         center: Offset(cx / count, cy / count),
       ),
     );
@@ -122,11 +142,11 @@ TeethChartData parseTeethChartData(String svg) {
 
   // 1) Guarantee every number gets its nearest unused closed contour.
   final pathsByTooth = <String, List<Path>>{
-    for (final label in numberCenters) label.id: <Path>[],
+    for (final label in numberLabels) label.id: <Path>[],
   };
   final usedClosedIds = <String>{};
 
-  for (final label in numberCenters) {
+  for (final label in numberLabels) {
     _ClosedPath? best;
     var bestDist = double.infinity;
     for (final candidate in closed) {
@@ -157,7 +177,7 @@ TeethChartData parseTeethChartData(String svg) {
     String? bestId;
     var bestDist = double.infinity;
     final center = candidate.path.getBounds().center;
-    for (final label in numberCenters) {
+    for (final label in numberLabels) {
       final dx = center.dx - label.center.dx;
       final dy = center.dy - label.center.dy;
       final dist = dx * dx + dy * dy;
@@ -214,6 +234,17 @@ TeethChartData parseTeethChartData(String svg) {
     for (final path in rawNumberPaths) shiftLowerIfNeeded(path),
   ];
 
+  final numberCenters = <String, Offset>{
+    for (final label in numberLabels)
+      label.id: label.center.dy > midY
+          ? label.center + lowerShift
+          : label.center,
+  };
+
+  final numberFontSize = numberHeightCount == 0
+      ? 140.0
+      : (numberHeightSum / numberHeightCount) * 0.95;
+
   final gapCenterY = midY + kJawGap / 2;
   final rightLabelAnchor = Offset(teeth['1']!.rect.center.dx, gapCenterY);
   final leftLabelAnchor = Offset(teeth['16']!.rect.center.dx, gapCenterY);
@@ -223,6 +254,8 @@ TeethChartData parseTeethChartData(String svg) {
     teeth: teeth,
     strokePaths: strokes,
     numberPaths: numberPaths,
+    numberCenters: numberCenters,
+    numberFontSize: numberFontSize,
     rightLabelAnchor: rightLabelAnchor,
     leftLabelAnchor: leftLabelAnchor,
   );
