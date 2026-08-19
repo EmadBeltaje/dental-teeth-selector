@@ -6,10 +6,18 @@ Supports **Universal** (ADA, `1`–`32`) and **European** (FDI / ISO 3950) numbe
 
 ## Preview 📸
 
-<p align="center">
-  <img src="preview-image/preview.gif" alt="Universal numbering preview" width="49%" />
-  <img src="preview-image/euro_preview.gif" alt="European numbering preview" width="49%" />
-</p>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <strong>Universal numbering</strong><br/>
+      <img src="preview-image/preview.gif" alt="Universal numbering preview" width="100%" />
+    </td>
+    <td align="center" width="50%">
+      <strong>European numbering</strong><br/>
+      <img src="preview-image/euro_preview.gif" alt="European numbering preview" width="100%" />
+    </td>
+  </tr>
+</table>
 
 ### Fallen teeth preview 🦷
 
@@ -72,13 +80,6 @@ DentalTeethSelector(
   onFallenChanged: (fallen) { /* updated fallen ids */ },
 )
 ```
-
-Assertions (debug):
-- `fallenTeeth` requires `showFallenTeeth: true`
-- `selectingFallenTeeth` requires `showFallenTeeth: true`
-- `fallenTeeth` and `initiallySelected` must not share ids
-
-See the [`example/`](example/) app (Universal / European / Fallen teeth tabs).
 
 ## Numbering systems 🔢
 
