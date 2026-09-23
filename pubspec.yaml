@@ -1,6 +1,6 @@
 name: dental_teeth_selector
 description: Interactive dental chart for selecting teeth in Flutter. Supports Universal and European (FDI) numbering, plus fallen teeth.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/EmadBeltaje/dental-teeth-selector
 repository: https://github.com/EmadBeltaje/dental-teeth-selector
 issue_tracker: https://github.com/EmadBeltaje/dental-teeth-selector/issues
