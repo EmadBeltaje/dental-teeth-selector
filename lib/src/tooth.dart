@@ -1,3 +1,6 @@
+/// @docImport 'dental_teeth_selector.dart';
+library;
+
 import 'dart:ui';
 
 /// A single selectable tooth parsed from the chart SVG.

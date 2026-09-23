@@ -1,3 +1,6 @@
+/// @docImport 'dental_teeth_selector.dart';
+library;
+
 /// Dental tooth numbering systems supported by [DentalTeethSelector].
 enum TeethNumberingSystem {
   /// Universal Numbering System (ADA): `"1"` … `"32"`.
